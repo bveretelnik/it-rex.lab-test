@@ -24,6 +24,7 @@
 }
 .styledTable tbody tr {
     border-bottom: 1px solid #ffffff;
+    cursor: pointer;
 }
 
 .styledTable tbody tr:nth-of-type(even) {
@@ -34,7 +35,7 @@
     border-bottom: 2px solid orange;
 }
 
-.styledTable tbody tr.activeRow{
+.styledTable tbody tr:hover{
     font-weight: bold;
     color: orange;
 }

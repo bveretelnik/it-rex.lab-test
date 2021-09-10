@@ -1,5 +1,6 @@
 .pagination {
     display: inline-block;
+    background-color: white;
 }
 
 .pagination a {
@@ -14,7 +15,7 @@
 
 .pagination a.active {
     background-color: orange;
-    color:orange;
+    color:white;
     border: 1px solid orange;
 }
 

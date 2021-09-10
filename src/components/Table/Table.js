@@ -1,9 +1,14 @@
+
 import React from 'react'
+import { CheckBox } from './Pagination/CheckBox/CheckBox'
+import { Pagination } from './Pagination/Pagination'
 import classes from './Table.module.css'
 
-export const Table = () => {
+export const Table = ({users}) => {
+
     return (
         <div className={classes.container}>
+            <CheckBox />
            <table className={classes.styledTable}>
     <thead>
         <tr>
@@ -16,25 +21,21 @@ export const Table = () => {
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>1</td>
-            <td>Bogdan</td>
-            <td>Veretelnik</td>
-            <td>bveretelnik@gmail.com</td>
-            <td>+380931202410</td>
-            <td>Male</td>
+        {users.map(user => (
+            <tr key={user.phone}>
+            <td>{user.id}</td>
+            <td>{user.firstName}</td>
+            <td>{user.lastName}</td>
+            <td>{user.email}</td>
+            <td>{user.phone}</td>
+            {/* <td>{user.id}</td> */}
         </tr>
-        <tr className={classes.activeRow}>
-            <td>2</td>
-            <td>Iryna</td>
-            <td>Hranetska</td>
-            <td>ih@gmail.com</td>
-            <td>+380631302410</td>
-            <td>Male</td>
-        </tr>
+        ))}
+        
 
     </tbody>
 </table> 
+        <Pagination />
         </div>
     )
 }
