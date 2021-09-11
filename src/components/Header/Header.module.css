@@ -1,18 +1,27 @@
 .container {
-    height: 100px;
-    background-color: white;
-    margin: 20px 40px;
-    display: flex;
-    justify-content: center ;
-    align-items: center;
-    flex-direction: column;
+  height: 100px;
+  background-color: white;
+  margin: 20px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .btn {
-    padding: 10px 20px;
-    margin-top: 10px;
-    background-color: orange;
-    cursor: pointer;
-    border: none;
-    color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: orange;
+  cursor: pointer;
+  border: none;
+  color: white;
+}
+.input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
