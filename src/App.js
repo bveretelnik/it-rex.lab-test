@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useState, useEffect, useMemo } from "react";
-import "./App.css";
 import { Header } from "./components/Header/Header";
 import { Table } from "./components/Table/Table";
 
@@ -12,24 +11,45 @@ function App() {
   const [selectedSort, setSelectedSort] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [directionSort, setDirectionSort] = useState(true);
+
   useEffect(() => {
     fetchUser();
   }, []);
 
-  const sorterUser = useMemo(() => {
+  const sortedUsers = useMemo(() => {
     if (selectedSort) {
-      return [...users].sort((a, b) =>
-        a[selectedSort].localeCompare(b[selectedSort])
-      );
+      if (selectedSort === "id") {
+        if (directionSort) {
+          return [...users].sort((a, b) => a[selectedSort] - b[selectedSort]);
+        } else {
+          return [...users].reverse();
+        }
+      }
+      if (directionSort) {
+        return [...users].sort((a, b) =>
+          a[selectedSort].localeCompare(b[selectedSort])
+        );
+      } else {
+        return [...users].sort((a, b) =>
+          b[selectedSort].localeCompare(a[selectedSort])
+        );
+      }
     }
+
+    console.log(directionSort);
     return users;
   }, [selectedSort, users]);
 
   const sortedAndSearchingUsers = useMemo(() => {
-    return sorterUser.filter((user) =>
+    return sortedUsers.filter((user) =>
       user.firstName.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [searchQuery, users]);
+  }, [searchQuery, sortedUsers]);
+
+  const sortUser = (sort) => {
+    setSelectedSort(sort);
+  };
 
   const fetchUser = async () => {
     const response = await axios(
@@ -53,14 +73,18 @@ function App() {
         searchQuery={searchQuery}
         setSearchValue={(e) => setSearchQuery(e.target.value)}
       />
+
       <Table
         users={currentUsers}
         limit={limit}
         totalUsers={totalUsers}
         pagination={pagination}
         page={page}
-        setSelectedSort={setSelectedSort}
         sortedAndSearchingUsers={sortedAndSearchingUsers}
+        value={selectedSort}
+        onChange={sortUser}
+        directionSort={directionSort}
+        setDirectionSort={setDirectionSort}
       />
     </div>
   );
