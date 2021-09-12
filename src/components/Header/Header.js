@@ -9,7 +9,7 @@ export const Header = ({ searchQuery, setSearchValue }) => {
       </div>
       <form>
         <input
-          placeholder="Search user"
+          placeholder="Search user name"
           value={searchQuery}
           onChange={setSearchValue}
           className={classes.input}

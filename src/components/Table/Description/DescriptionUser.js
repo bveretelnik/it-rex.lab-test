@@ -25,6 +25,10 @@ export const DescriptionUser = ({ userDetails, setShowDetails }) => {
               <li>
                 <span>Phone:</span> {userDetails.phone}
               </li>
+              <li>
+                <span>Addres:</span>{" "}
+                {`${userDetails.adress.state},${userDetails.adress.city}, ${userDetails.adress.streetAddress}`}
+              </li>
             </ol>
           </div>
         </div>

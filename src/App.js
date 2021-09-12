@@ -1,7 +1,10 @@
 import axios from "axios";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Header } from "./components/Header/Header";
+import { SelectSearch } from "./components/SelectSearch/SelectSearch";
 import { Table } from "./components/Table/Table";
+import { ArrayContext } from "./context/context";
+import { useUsers } from "./hooks/useUsers";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -10,46 +13,21 @@ function App() {
 
   const [selectedSort, setSelectedSort] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
   const [directionSort, setDirectionSort] = useState(true);
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
+  const sortedAndSearchingUsers = useUsers(
+    users,
+    selectedSort,
+    searchQuery,
+    directionSort
+  );
 
-  const sortedUsers = useMemo(() => {
-    if (selectedSort) {
-      if (selectedSort === "id") {
-        if (directionSort) {
-          return [...users].sort((a, b) => a[selectedSort] - b[selectedSort]);
-        } else {
-          return [...users].reverse();
-        }
-      }
-      if (directionSort) {
-        return [...users].sort((a, b) =>
-          a[selectedSort].localeCompare(b[selectedSort])
-        );
-      } else {
-        return [...users].sort((a, b) =>
-          b[selectedSort].localeCompare(a[selectedSort])
-        );
-      }
-    }
-
-    console.log(directionSort);
-    return users;
-  }, [selectedSort, users]);
-
-  const sortedAndSearchingUsers = useMemo(() => {
-    return sortedUsers.filter((user) =>
-      user.firstName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery, sortedUsers]);
-
-  const sortUser = (sort) => {
-    setSelectedSort(sort);
-  };
+  const sortArr = [
+    { value: "firstName", name: "First Name" },
+    { value: "lastName", name: "Last Name" },
+    { value: "email", name: "Email" },
+    { value: "phone", name: "Phone" },
+  ];
 
   const fetchUser = async () => {
     const response = await axios(
@@ -57,6 +35,15 @@ function App() {
     );
     setUsers(response.data);
   };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const sortUser = (sort) => {
+    setSelectedSort(sort);
+  };
+
   const totalUsers = sortedAndSearchingUsers.length;
   const indexOfLastUser = page * limit;
   const indexOfFirstUser = indexOfLastUser - limit;
@@ -68,25 +55,35 @@ function App() {
   const pagination = (pageNumber) => setPage(pageNumber);
 
   return (
-    <div className="App">
-      <Header
-        searchQuery={searchQuery}
-        setSearchValue={(e) => setSearchQuery(e.target.value)}
-      />
-
-      <Table
-        users={currentUsers}
-        limit={limit}
-        totalUsers={totalUsers}
-        pagination={pagination}
-        page={page}
-        sortedAndSearchingUsers={sortedAndSearchingUsers}
-        value={selectedSort}
-        onChange={sortUser}
-        directionSort={directionSort}
-        setDirectionSort={setDirectionSort}
-      />
-    </div>
+    <ArrayContext.Provider
+      value={{
+        sortArr,
+      }}
+    >
+      <div className="App">
+        <Header
+          searchQuery={searchQuery}
+          setSearchValue={(e) => setSearchQuery(e.target.value)}
+        />
+        <SelectSearch
+          selectedSort={selectedSort}
+          users={users}
+          onChange={sortUser}
+        />
+        <Table
+          users={currentUsers}
+          limit={limit}
+          selectedSort={selectedSort}
+          totalUsers={totalUsers}
+          pagination={pagination}
+          page={page}
+          sortUser={sortUser}
+          sortedAndSearchingUsers={sortedAndSearchingUsers}
+          directionSort={directionSort}
+          setDirectionSort={setDirectionSort}
+        />
+      </div>
+    </ArrayContext.Provider>
   );
 }
 

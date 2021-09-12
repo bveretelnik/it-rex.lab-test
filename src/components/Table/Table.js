@@ -1,28 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { DescriptionUser } from "./Description/DescriptionUser";
-import { SelectSearch } from "./SelectSearch/SelectSearch";
 import { Pagination } from "./Pagination/Pagination";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import classes from "./Table.module.css";
+import { ArrayContext } from "../../context/context";
 
 export const Table = ({
   users,
-  value,
-  onChange,
+  sortUser,
   page,
   limit,
   totalUsers,
   pagination,
   directionSort,
   setDirectionSort,
+  selectedSort,
 }) => {
-  const sortArr = [
-    { value: "id", name: "ID" },
-    { value: "firstName", name: "First Name" },
-    { value: "lastName", name: "Last Name" },
-    { value: "email", name: "Email" },
-    { value: "phone", name: "Phone" },
-  ];
+  const { sortArr } = useContext(ArrayContext);
   const [userDetails, setUserDetails] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
 
@@ -31,13 +25,11 @@ export const Table = ({
     setShowDetails(true);
   };
   const handleClick = (e) => {
-    onChange(e.target.value);
+    sortUser(e.target.value);
     setDirectionSort(!directionSort);
-    console.log(directionSort);
   };
   return (
     <div className={classes.container}>
-      <SelectSearch value={value} onChange={onChange} options={sortArr} />
       <table className={classes.styledTable}>
         <thead>
           <tr>
@@ -50,7 +42,11 @@ export const Table = ({
                 >
                   {item.name}
                 </button>
-                {directionSort ? <AiFillCaretUp /> : <AiFillCaretDown />}
+                {directionSort && item.value === selectedSort ? (
+                  <AiFillCaretUp />
+                ) : (
+                  <AiFillCaretDown />
+                )}
               </th>
             ))}
           </tr>
@@ -58,7 +54,6 @@ export const Table = ({
         <tbody>
           {users.map((user) => (
             <tr key={user.phone} onClick={() => showUserDetails(user)}>
-              <td>{user.id}</td>
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
               <td>{user.email}</td>
