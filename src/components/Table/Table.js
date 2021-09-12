@@ -54,10 +54,12 @@ export const Table = ({
         <tbody>
           {users.map((user) => (
             <tr key={user.phone} onClick={() => showUserDetails(user)}>
+              <td>{user.id}</td>
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
               <td>{user.email}</td>
               <td>{user.phone}</td>
+              <td>{user.adress.state}</td>
             </tr>
           ))}
         </tbody>

@@ -23,10 +23,12 @@ function App() {
   );
 
   const sortArr = [
+    { value: "id", name: "ID" },
     { value: "firstName", name: "First Name" },
     { value: "lastName", name: "Last Name" },
     { value: "email", name: "Email" },
     { value: "phone", name: "Phone" },
+    { value: "state", name: "State" },
   ];
 
   const fetchUser = async () => {
