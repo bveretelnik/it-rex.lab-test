@@ -16,11 +16,19 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [directionSort, setDirectionSort] = useState(true);
 
+  const fetchUser = async () => {
+    const response = await axios(
+      "https://itrex-react-lab-files.s3.eu-central-1.amazonaws.com/react-test-api.json"
+    );
+    setUsers(response.data);
+  };
+
   const sortedAndSearchingUsers = useUsers(
     users,
     selectedSort,
     searchQuery,
-    directionSort
+    directionSort,
+    fetchUser
   );
 
   const sortArr = [
@@ -32,16 +40,13 @@ function App() {
     { value: "state", name: "State" },
   ];
 
-  const fetchUser = async () => {
-    const response = await axios(
-      "https://itrex-react-lab-files.s3.eu-central-1.amazonaws.com/react-test-api.json"
-    );
-    setUsers(response.data);
-  };
-
   useEffect(() => {
     fetchUser();
   }, []);
+  useEffect(() => {
+    setUsers(sortedAndSearchingUsers);
+    // eslint-disable-next-line
+  }, [selectedSort]);
 
   const sortUser = (sort) => {
     setSelectedSort(sort);
@@ -60,6 +65,7 @@ function App() {
   const resetFilter = () => {
     setSelectedSort("");
     setSearchQuery("");
+    fetchUser();
   };
   return (
     <ArrayContext.Provider
