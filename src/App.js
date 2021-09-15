@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { ButtonReset } from "./components/ButtonReset/ButtonReset";
 import { Header } from "./components/Header/Header";
 import { SelectSearch } from "./components/SelectSearch/SelectSearch";
 import { Table } from "./components/Table/Table";
@@ -56,6 +57,10 @@ function App() {
 
   const pagination = (pageNumber) => setPage(pageNumber);
 
+  const resetFilter = () => {
+    setSelectedSort("");
+    setSearchQuery("");
+  };
   return (
     <ArrayContext.Provider
       value={{
@@ -72,6 +77,7 @@ function App() {
           users={users}
           onChange={sortUser}
         />
+        <ButtonReset resetFilter={resetFilter} />
         <Table
           users={currentUsers}
           limit={limit}
